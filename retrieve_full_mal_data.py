@@ -37,7 +37,7 @@ while not end_of_animelist:
 
             mal_dict = maldata.createdict_top(mal_soup)
             mal_df = pd.DataFrame(mal_dict)
-            mal_df.to_pickle(filename_part + '_pt' + str(counter) + '.pkl')
+            mal_df.to_pickle(filename_part + '.pkl')
 
         else:
             end_of_animelist = True
