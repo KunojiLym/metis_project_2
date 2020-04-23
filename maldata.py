@@ -15,6 +15,8 @@ def loadtopanime(page_num):
     Load the top anime from MAL based on page_num, 50 per page
     So X = (page_num - 1) * 50 + 1) to (page_num * 50)
     Returns a soup of the list of X top anime on page_num
+
+    Complexity: O(requests.get or BeautifulSoup)
     '''
     limit = (page_num - 1) * 50
     url = "https://myanimelist.net/topanime.php?limit=" + str(limit)
@@ -22,29 +24,35 @@ def loadtopanime(page_num):
     if response.status_code != 200:
         print('Enountered', response.status_code, 'error while reading page', page_num , 'of MAL Top Anime')
     else:
-        return BeautifulSoup(response.text, 'html5lib').find_all(class_="detail")
+        return BeautifulSoup(response.text, 'lxml').find_all(class_="detail")
     
 def initEntry_top(soup):
     '''
     Takes the soup of an entry in the MAL top 50
     Returns a dictionay entry with Title and URL of the anime
+
+    Complexity: O(soup.find or soup.get)
     '''
     entry = {}
-    entry['Title'] = soup.find(class_="hoverinfo_trigger").text
-    entry['URL'] = soup.find(class_="hoverinfo_trigger").get('href')
+    entry_soup = soup.find(class_="hoverinfo_trigger")
+
+    entry['Title'] = entry_soup.text
+    entry['URL'] = entry_soup.get('href')
     return entry
 
 def retrieveEntry(entry):
     '''
     Takes a dictionary that has URL and Title of the MAL anime
     Returns a soup of the anine page in question
+
+    Complexity: O(requests.get or BeautifulSoup)
     '''
     response = requests.get(entry['URL'])
     if response.status_code != 200:
         print('Encountered ' + str(response.status_code) + ' error reading ' + entry['Title'])
         return -1
     else:
-        return BeautifulSoup(response.text, 'html5lib')
+        return BeautifulSoup(response.text, 'lxml')
 
 def retrieveSidebar(anime_dict, soup):
     '''
@@ -203,7 +211,7 @@ def loadanime_char(page_num, char):
     if response.status_code != 200:
         print('Encountered', response.status_code, 'error while reading page', page_num , 'of MAL anime starting with', char)
     else:
-        return BeautifulSoup(response.text, 'html5').find_all(class_="picSurround")
+        return BeautifulSoup(response.text, 'lxml').find_all(class_="picSurround")
 
 def initEntry_char(soup):
     '''

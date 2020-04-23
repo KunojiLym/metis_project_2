@@ -7,7 +7,7 @@ counter = 1
 start_reading = False
 
 print("loading MAL list...", flush=True)
-filename = 'data\\mal_full_list'
+filename = 'data\\mal_full\\mal_full_list'
 filename_part = filename + '_pt' + str(counter)
 
 if not os.path.exists(filename_part + '.pkl'):
@@ -49,4 +49,4 @@ for i in (1, counter + 1):
     mal_df_list.append(pd.from_pickle(filename_part + '.pkl'))
 
 mal_df = pd.DataFrame(mal_df_list)
-mal_df.to_pickle('data\\mal_full_list.pkl')
+mal_df.to_pickle(filename + '.pkl')
