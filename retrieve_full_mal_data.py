@@ -1,29 +1,52 @@
 import pandas as pd
+import os
 
 import maldata
 
 counter = 1
+start_reading = False
 
-print("loading MAL list", end="", flush=True)
+print("loading MAL list...", flush=True)
+filename = 'data\\mal_full_list'
+filename_part = filename + '_pt' + str(counter)
 
-mal_soup = maldata.loadtopanime(counter)
-mal_dict = maldata.createdict_top(mal_soup)
-mal_df = pd.DataFrame(mal_dict)
+if not os.path.exists(filename_part + '.pkl'):
 
-print(".", end="", flush=True)
+    start_reading = True
+    print("Loading part", counter, flush=True)
 
+    mal_soup = maldata.loadtopanime(counter)
+    mal_dict = maldata.createdict_top(mal_soup)
+    mal_df = pd.DataFrame(mal_dict)
+
+    mal_df.to_pickle(filename_part + '.pkl')
 
 end_of_animelist = False
 while not end_of_animelist:
     counter += 1
-    mal_soup = maldata.loadtopanime(counter)
-    if mal_soup is not None:
-        mal_dict = maldata.createdict_top(mal_soup)
-        mal_df = pd.concat([mal_df, pd.DataFrame(mal_dict)])
-        print(".", end="", flush=True)
-    else:
-        end_of_animelist = True
-        print("done.")
+    filename_part = filename + '_pt' + str(counter)
+    if not os.path.exists(filename_part + '.pkl'):
+        if not start_reading:
+            start_reading = True
+            print("Resuming loading part", counter, flush=True)
 
+        mal_soup = maldata.loadtopanime(counter)
 
-mal_df.to_pickle('mal_full_list.pkl')
+        if mal_soup is not None:
+            print("Loading part", counter, flush=True)
+
+            mal_dict = maldata.createdict_top(mal_soup)
+            mal_df = pd.DataFrame(mal_dict)
+            mal_df.to_pickle(filename_part + '_pt' + str(counter) + '.pkl')
+
+        else:
+            end_of_animelist = True
+            print("Done.")
+
+mal_df_list = []
+for i in (1, counter + 1):
+    filename_part = filename + '_pt' + str(counter)
+    mal_df_list.append(pd.from_pickle(filename_part + '.pkl'))
+
+mal_df = pd.DataFrame(mal_df_list)
+mal_df.to_pickle('data\\mal_full_list.pkl')
