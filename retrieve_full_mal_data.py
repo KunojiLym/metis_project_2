@@ -48,5 +48,5 @@ for i in range(1, counter):
     filename_part = filename + '_pt' + str(i)
     mal_df_list.append(pd.read_pickle(filename_part + '.pkl'))
 
-mal_df = pd.DataFrame(mal_df_list)
+mal_df = pd.concat(mal_df_list, ignore_index=True)
 mal_df.to_pickle(filename + '.pkl')
