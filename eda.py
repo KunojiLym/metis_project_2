@@ -83,7 +83,7 @@ def diagnostic_plot(x, y):
     plt.ylabel("residuals")
     
     plt.subplot(1, 3, 3)
-    #Generates a probability plot of sample data against the quantiles of a 
+    # Generates a probability plot of sample data against the quantiles of a 
     # specified theoretical distribution 
     stats.probplot(res, dist="norm", plot=plt)
     plt.title("Normal Q-Q plot")
