@@ -52,12 +52,12 @@ def merge_cols(df, col_names):
 
     return merged_list
 
-def list_to_df_col(list, source_df, col_name):
+def list_to_df_col(source_list, source_df, col_name):
     '''
-    Returns a DataFrame with a single col_name, data from list and index based on source_df
+    Returns a DataFrame with a single col_name, data from source_list and index based on source_df
     '''
     df = pd.DataFrame(index=source_df.index)
-    df[col_name] = list
+    df[col_name] = source_list
 
     return df
 
