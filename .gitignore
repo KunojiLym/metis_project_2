@@ -1,0 +1,5 @@
+
+*.pyc
+.ipynb_checkpoints/maldata-checkpoint.py
+.ipynb_checkpoints/eda_mal-checkpoint.ipynb
+.ipynb_checkpoints/eda-checkpoint.py
